@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 class NewOfferPage extends StatefulWidget {
   const NewOfferPage({super.key});
@@ -37,9 +39,25 @@ class _NewOfferPageState extends State<NewOfferPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
-              child: const Text('Gem'),
-            ),
+  onPressed: () async {
+    await Supabase.instance.client.from('offers').insert({
+      'customer_name': customerController.text,
+      'description': descriptionController.text,
+    });
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Tilbud gemt'),
+        ),
+      );
+
+      Navigator.pop(context);
+    }
+  },
+  child: const Text('Gem'),
+)
+
           ],
         ),
       ),
